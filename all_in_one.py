@@ -17,6 +17,9 @@ def information_ratio(IC, BR, TC=1.0):
     """
     Computes Information Ratio using the Fundamental Law:
     IR = TC * IC * sqrt(BR)
+    IC: INFO Coefficient
+    BR: Breadth
+    TC: Transfer Coefficient
     """
     return TC * IC * np.sqrt(BR)
 
