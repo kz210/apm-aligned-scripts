@@ -22,6 +22,15 @@ def get_fff_returns():
     rets.index = pd.to_datetime(rets.index, format="%Y%m").to_period('M')
     return rets
 
+def get_fff_returns_quiz():
+    """
+    Load the Fama-French Research Factor Monthly Dataset
+    """
+    rets = pd.read_csv("data/F-F_Research_Data_Factors.csv", skiprows=3,nrows=1110,
+                        index_col=0,header=0,na_values=-99.99).astype(float)/100 #index_col=0, header=0,
+    rets.index = pd.to_datetime(rets.index, format="%Y%m").to_period('M')
+    return rets
+
 
 def get_hfi_returns():
     """
@@ -50,7 +59,7 @@ def get_ind_file(filetype):
         name = "size"
         divisor = 1
                          
-    ind = pd.read_csv(f"data/ind30_m_{name}.csv", header=0, index_col=0)/divisor
+    ind = pd.read_csv(f"data/ind49_m_{name}.csv", header=0, index_col=0)/divisor
     ind.index = pd.to_datetime(ind.index, format="%Y%m").to_period('M')
     ind.columns = ind.columns.str.strip()
     return ind

@@ -33,3 +33,32 @@ weights_b.sort_values(ascending=False).head(6).round(4)*100
 brk2009 = brka_m["2009":]["BRKA"]
 ind2009 = ind["2009":]
 erk.style_analysis(brk2009, ind2009).sort_values(ascending=False).head(6).round(4)*100
+
+
+# module 1 quiz: 0.53 1.55 0.59 1.42 Hlth Gold
+import statsmodels.api as sm
+ind = erk.get_ind_returns()["1991":"2018"]
+fff = erk.get_fff_returns_quiz() #fff = erk.get_fff_returns()
+dict = {}
+for col in ind.columns:
+    indus = ind[col]
+    fff = erk.get_fff_returns()
+    brka_excess = indus["1991":"2018"] - fff.loc["1991":"2018", 'RF'].values #r - rf
+    mkt_excess = fff.loc["1991":"2018", ['Mkt-RF']] #rm - rf
+    exp_var = mkt_excess.copy()
+    exp_var["Constant"] = 1
+    exp_var["Value"] = fff.loc["1991":"2018", ['HML']]
+    exp_var["Size"] = fff.loc["1991":"2018", ['SMB']]
+    lm = sm.OLS(brka_excess, exp_var).fit()
+    dict[col]= [lm.params['Mkt-RF'], lm.params['Value'], lm.params['Size']]
+#    print(lm.summary())
+print(dict)
+max_val = max(dict, key=lambda k: dict[k][1])
+min_val = min(dict, key=lambda k: dict[k][1])
+max_size = max(dict, key=lambda k: dict[k][2])
+min_size = min(dict, key=lambda k: dict[k][2])
+print(max_val, min_val, max_size, min_size)
+
+
+
+
